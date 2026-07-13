@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Av. Emre Altundaş | Avukatlık ve Hukuki Danışmanlık</title>
+    
+    <!-- Google Fonts: Cormorant Garamond (Başlıklar) & Inter (Metinler) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome (İkonlar) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* --- RENK PALETİ VE DEĞİŞKENLER --- */
+        :root {
+            --navy: #0F2747;          /* Lacivert - Kurumsallık */
+            --gold: #C8A45D;          /* Altın - Prestij */
+            --white: #FFFFFF;         /* Beyaz - Temizlik */
+            --light-gray: #F5F5F5;    /* Açık Gri - Arka plan */
+            --modern-text: #1E293B;   /* Gece Mavisi Gri - Antrasit yerine modern okunaklı ton */
+            
+            --font-head: 'Cormorant Garamond', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* --- TEMEL AYARLAR (Keskin Hatlar & Beyaz Alan) --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border-radius: 0 !important; /* Hukukun kesinliğini simgeleyen keskin köşeler */
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--modern-text);
+            background-color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-head);
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* İnce Altın Çizgi Dekoru */
+        .gold-line {
+            width: 60px;
+            height: 2px;
+            background-color: var(--gold);
+            margin: 20px 0;
+        }
+        
+        .gold-line.center {
+            margin: 20px auto;
+        }
+
+        section {
+            padding: 110px 0; /* Bol beyaz alan kullanımı */
+        }
+
+        /* --- KVKK MODAL --- */
+        .kvkk-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 39, 71, 0.75);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .kvkk-modal-overlay.active {
+            display: flex;
+        }
+
+        .kvkk-modal-box {
+            background: var(--white);
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 45px 40px;
+            position: relative;
+            border-top: 3px solid var(--gold);
+        }
+
+        .kvkk-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--navy);
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .kvkk-modal-content p {
+            margin-bottom: 16px;
+            font-size: 0.92rem;
+            opacity: 0.9;
+        }
+
+        .kvkk-check input[type="checkbox"] {
+            accent-color: var(--gold);
+        }
+
+        /* --- NAVBAR --- */
+        header {
+            background-color: var(--white);
+            padding: 25px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(200, 164, 93, 0.3); /* Çok ince altın detay */
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-head);
+            font-size: 2rem;
+            color: var(--navy);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 35px;
+        }
+
+        nav ul li a {
+            font-size: 0.90rem;
+            font-weight: 500;
+            color: var(--navy);
+            transition: color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        nav ul li a:hover {
+            color: var(--gold);
+        }
+
+        /* --- HERO (Giriş Bölümü) --- */
+        .hero {
+            background-color: var(--light-gray);
+            padding-top: 180px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            line-height: 1.15;
+            margin-bottom: 25px;
+        }
+
+        .sub-heading {
+            font-family: var(--font-head);
+            font-size: 1.6rem;
+            color: var(--gold);
+            font-style: italic;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 16px 40px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid var(--navy);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background-color: var(--white);
+            color: var(--navy);
+            border-color: var(--navy);
+        }
+
+        .btn-gold {
+            background-color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .btn-gold:hover {
+            background-color: transparent;
+            color: var(--gold);
+        }
+
+        .hero-img-wrapper {
+            position: relative;
+        }
+
+        .hero-img-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--gold);
+            z-index: 0;
+        }
+
+        .hero-img-wrapper img {
+            width: 100%;
+            height: auto;
+            position: relative;
+            z-index: 1;
+            filter: grayscale(15%); 
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* --- BÜROMUZ HAKKINDA --- */
+        .about-section {
+            background-color: var(--white);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+        }
+
+        .about-text h2 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: var(--modern-text);
+            opacity: 0.9;
+        }
+
+        .about-text p.highlight {
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            color: var(--navy);
+            border-left: 3px solid var(--gold);
+            padding-left: 20px;
+            margin: 30px 0;
+            font-style: italic;
+        }
+
+        /* --- FAALİYET ALANLARI --- */
+        .services-section {
+            background-color: var(--light-gray);
+            text-align: center;
+        }
+
+        .services-section h2 {
+            font-size: 3rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            background-color: var(--white);
+            padding: 50px 30px;
+            border: 1px solid #EAEAEA;
+            border-bottom: 3px solid var(--gold);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(15, 39, 71, 0.08);
+        }
+
+        .service-card i {
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 25px;
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: var(--modern-text);
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+
+        /* --- ÇALIŞMA PRENSİPLERİ --- */
+        .features-section {
+            background-color: var(--navy);
+            color: var(--white);
+        }
+
+        .features-section h2 {
+            color: var(--white);
+            font-size: 3rem;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-box {
+            text-align: center;
+            padding: 40px 30px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: background 0.3s ease;
+        }
+
+        .feature-box:hover {
+            background-color: rgba(255,255,255,0.03);
+        }
+
+        .feature-box i {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .feature-box h4 {
+            color: var(--white);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-family: var(--font-head);
+        }
+
+        .feature-box p {
+            font-size: 0.9rem;
+            color: #94A3B8; /* Yazıyı yormayan açık mavi/gri tonu */
+        }
+
+        /* --- SIK SORULAN SORULAR --- */
+        .faq-section {
+            background-color: var(--white);
+        }
+        
+        .faq-section h2 {
+            font-size: 3rem;
+            text-align: center;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+
+        details {
+            border-bottom: 1px solid #EAEAEA;
+            padding: 25px 0;
+        }
+
+        summary {
+            font-family: var(--font-head);
+            font-size: 1.4rem;
+            color: var(--navy);
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: '+';
+            color: var(--gold);
+            font-size: 1.5rem;
+            font-family: var(--font-body);
+        }
+
+        details[open] summary::after {
+            content: '-';
+        }
+
+        details p {
+            margin-top: 15px;
+            color: var(--modern-text);
+            opacity: 0.9;
+            padding-left: 15px;
+            border-left: 2px solid var(--gold);
+        }
+
+        /* --- İLETİŞİM --- */
+        .contact-section {
+            background-color: var(--light-gray);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .contact-info h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .info-item i {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-right: 20px;
+            margin-top: 5px;
+        }
+
+        .info-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .info-item p {
+            color: var(--modern-text);
+            opacity: 0.9;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+            margin-top: 20px;
+            filter: grayscale(100%) contrast(1.1);
+        }
+
+        .contact-form {
+            background-color: var(--white);
+            padding: 50px;
+            border-top: 4px solid var(--navy);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+        }
+
+        .contact-form h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #EAEAEA;
+            background-color: var(--light-gray);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--modern-text);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            background-color: var(--white);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--navy);
+            color: var(--white);
+            text-align: center;
+            padding: 50px 0;
+            border-top: 3px solid var(--gold);
+        }
+
+        footer .logo {
+            color: var(--white);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        footer p {
+            font-size: 0.9rem;
+            color: #94A3B8;
+        }
+
+        /* --- MOBİL UYUMLULUK --- */
+        @media (max-width: 992px) {
+            .hero-grid, .about-grid, .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+            .hero {
+                padding-top: 140px;
+            }
+            nav ul {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            section {
+                padding: 70px 0;
+            }
+            .contact-form {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">Av. Emre <span>Altundaş</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#hakkimizda">Hakkımızda</a></li>
+                    <li><a href="#faaliyet">Faaliyet Alanları</a></li>
+                    <li><a href="#prensipler">Prensiplerimiz</a></li>
+                    <li><a href="#sss">SSS</a></li>
+                    <li><a href="#iletisim">İletişim</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="container hero-grid">
+            <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <span class="sub-heading">Hukuk ve Danışmanlık Bürosu</span>
+                <h1>Avukatlık ve Hukuki Danışmanlık Hizmetleri.</h1>
+                <p style="margin-bottom: 30px; font-size: 1.1rem; opacity: 0.9;">Ulusal ve uluslararası mevzuat çerçevesinde, gerçek ve tüzel kişilere yönelik avukatlık ve hukuki danışmanlık hizmeti sunulmaktadır.</p>
+                <a href="#iletisim" class="btn btn-gold">İletişime Geçin</a>
+            </div>
+            <!-- Profil Fotoğrafı (Gerçek fotoğraf ile değiştirilebilir) -->
+            <div class="hero-image" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                <div class="hero-img-wrapper">
+                    <img src="https://i.ibb.co/hFGxy7PR/505458149-18505948030041091-4461130245049270333-n.jpg" alt="Av. Emre Altundaş">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BÜROMUZ HAKKINDA -->
+    <section class="about-section" id="hakkimizda">
+        <div class="container about-grid">
+            <div data-aos="fade-up" data-aos-duration="1000">
+                <h2>Büromuz Hakkında</h2>
+                <div class="gold-line"></div>
+                <p>Av. Emre Altundaş Hukuk Bürosu, bireylerin ve işletmelerin karşılaştığı hukuki meselelere kalıcı ve uygulanabilir çözümler üretmek amacıyla kuruldu. Her dosyayı kendine özgü bir süreç olarak ele alıyor, müvekkillerimizin haklarını en etkin şekilde savunmak için sürecin her adımını birlikte yürütüyoruz.</p>
+                
+                <p class="highlight">Ceza hukukundan aile hukukuna, ticari uyuşmazlıklardan gayrimenkul işlemlerine kadar geniş bir alanda hizmet veriyoruz.</p>
+                
+                <p>Bizim için hukuk yalnızca kanun maddelerinden ibaret değil; güven, açıklık ve emek ister. Bu nedenle müvekkillerimizle kurduğumuz her ilişkide dürüstlüğü, gizliliği ve adalete erişimi önceliğimiz olarak görüyoruz.</p>
+            </div>
+            <div style="background: var(--navy); padding: 50px; color: var(--white); position: relative;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                <span style="position: absolute; top: 15px; right: 15px; background: var(--gold); color: var(--navy); font-size: 0.7rem; font-weight: 600; padding: 4px 10px; text-transform: uppercase; letter-spacing: 1px;">Örnektir</span>
+                <h3 style="color: var(--gold); font-size: 2rem; margin-bottom: 20px;">Kurucu Avukat</h3>
+                <p style="color: #94A3B8; margin-bottom: 15px;"><strong style="color: var(--white);">Eğitim:</strong> İstanbul Üniversitesi Hukuk Fakültesi mezunu; ceza hukuku ve ticaret hukuku alanlarında ileri düzey sertifika programlarını tamamlamış, mesleki gelişimini güncel mevzuat ve içtihat takibiyle sürdürmektedir.</p>
+                <p style="color: #94A3B8; margin-bottom: 15px;"><strong style="color: var(--white);">Kariyer:</strong> 10 yılı aşkın süredir ceza, aile ve ticaret hukuku alanlarında dava takibi yürütmekte; çeşitli KOBİ ve kurumsal firmalara sözleşme ve uyuşmazlık yönetimi konusunda danışmanlık vermektedir.</p>
+                <p style="color: #94A3B8; margin-bottom: 15px;"><strong style="color: var(--white);">Misyon:</strong> Her müvekkilin hikayesinin farklı olduğu inancıyla, hukukun üstünlüğü ilkesi çerçevesinde savunma hakkının etkin ve özenli biçimde kullanılmasını ilke edinmiştir.</p>
+                <p style="color: var(--gold); font-size: 0.8rem; font-style: italic; margin-top: 20px; opacity: 0.85;">* Bu bölümdeki bilgiler örnek amaçlı hazırlanmıştır. Yayına almadan önce gerçek eğitim, kariyer ve misyon bilgileriyle güncellenmesi gerekmektedir.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAALİYET ALANLARI -->
+    <section class="services-section" id="faaliyet">
+        <div class="container">
+            <h2 data-aos="fade-up">Faaliyet Alanlarımız</h2>
+            <div class="gold-line center" data-aos="fade-up"></div>
+            <p style="max-width: 600px; margin: 0 auto; opacity: 0.8;" data-aos="fade-up">Büromuz nezdinde yürütülen başlıca çalışma alanları aşağıda sunulmuştur.</p>
+            
+            <div class="services-grid">
+                <!-- Ceza Hukuku -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fa-solid fa-scale-unbalanced"></i>
+                    <h3>Ceza Hukuku</h3>
+                    <p>Soruşturma ve kovuşturma evrelerinde müşteki ve sanık müdafiliği ile adil yargılanma hakkının tesisi.</p>
+                </div>
+                
+                <!-- Aile Hukuku -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fa-solid fa-people-roof"></i>
+                    <h3>Aile Hukuku</h3>
+                    <p>Anlaşmalı ve çekişmeli boşanma, nafaka, velayet, mal rejimi davaları ve 6284 sayılı kanun kapsamındaki süreçler.</p>
+                </div>
+                
+                <!-- İş Hukuku -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <h3>İş Hukuku</h3>
+                    <p>İşe iade, kıdem/ihbar tazminatı, iş kazalarından kaynaklanan süreçler ve kurumsal işveren danışmanlığı.</p>
+                </div>
+
+                <!-- Miras Hukuku -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fa-solid fa-scroll"></i>
+                    <h3>Miras Hukuku</h3>
+                    <p>Veraset ilamı, vasiyetname düzenlenmesi, tenkis, muris muvazaası ve mirasın taksimine ilişkin hukuki işlemler.</p>
+                </div>
+
+                <!-- İcra ve İflas Hukuku -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <h3>İcra ve İflas Hukuku</h3>
+                    <p>İlamsız ve ilamlı icra takipleri, haciz işlemleri, alacak tahsili ve iflas/konkordato hukuku süreçleri.</p>
+                </div>
+
+                <!-- Gayrimenkul Hukuku -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="600">
+                    <i class="fa-solid fa-building"></i>
+                    <h3>Gayrimenkul Hukuku</h3>
+                    <p>Tapu iptal/tescil, tahliye davaları, kira tespiti ve inşaat sözleşmelerinin hukuki altyapısının hazırlanması.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÇALIŞMA PRENSİPLERİ (Eski Neden Biz) -->
+    <section class="features-section" id="prensipler">
+        <div class="container">
+            <h2 data-aos="fade-up">Çalışma Prensiplerimiz</h2>
+            <div class="gold-line center" data-aos="fade-up"></div>
+            
+            <div class="features-grid">
+                <div class="feature-box" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <h4>Sır Saklama Yükümlülüğü</h4>
+                    <p>Müvekkillerimize ait tüm bilgi ve belgeler, meslek kuralları gereğince mutlak bir gizlilik içinde korunur.</p>
+                </div>
+                
+                <div class="feature-box" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fa-solid fa-eye"></i>
+                    <h4>Mesleki Şeffaflık</h4>
+                    <p>Hukuki süreçlerin her aşaması, olası riskler ve sonuçlar müvekkillerimizle açık ve dürüst biçimde paylaşılır.</p>
+                </div>
+
+                <div class="feature-box" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    <h4>Özen Yükümlülüğü</h4>
+                    <p>Üstlenilen hukuki iş ve işlemler, güncel mevzuat ve içtihatlar ışığında en yüksek mesleki özenle takip edilir.</p>
+                </div>
+
+                <div class="feature-box" data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fa-solid fa-gavel"></i>
+                    <h4>Bağımsızlık</h4>
+                    <p>Hukuk büromuz, görevini ifa ederken dış etkenlerden bağımsız olarak yalnızca hukukun üstünlüğünü gözetir.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIK SORULAN SORULAR -->
+    <section class="faq-section" id="sss">
+        <div class="container">
+            <h2 data-aos="fade-up">Sık Sorulan Sorular</h2>
+            <div class="gold-line center" data-aos="fade-up"></div>
+            
+            <div class="faq-container" data-aos="fade-up" data-aos-delay="200">
+                <details open>
+                    <summary>İlk danışmanlık görüşmesi ücretli midir?</summary>
+                    <p>Avukatlık Kanunu ve Avukatlık Asgari Ücret Tarifesi ile meslek kuralları gereğince, avukatların ücretsiz iş alması yasaktır. Bu nedenle hukuki danışmanlık hizmetlerimiz ücrete tabidir.</p>
+                </details>
+
+                <details>
+                    <summary>Dava süreçleri ne kadar sürmektedir?</summary>
+                    <p>Dava süreleri, yargılamanın türüne, davanın açıldığı adliyenin iş yüküne ve kanun yolu (istinaf/temyiz) süreçlerine göre değişiklik göstermektedir. Kesin bir süre vermek yasal olarak mümkün değildir.</p>
+                </details>
+
+                <details>
+                    <summary>Farklı illerdeki davalarla ilgileniyor musunuz?</summary>
+                    <p>Evet, müvekkillerimizin hukuki ihtiyaçları doğrultusunda Türkiye'nin farklı illerinde bulunan dava ve uyuşmazlık süreçleri büromuz tarafından bizzat takip edilmektedir.</p>
+                </details>
+
+                <details>
+                    <summary>Avukata vekaletname nasıl çıkartılır?</summary>
+                    <p>Vekaletname, büromuzdan temin edeceğiniz vekalet bilgileri ile birlikte Türkiye Cumhuriyeti sınırları içerisindeki herhangi bir noterden; yurt dışında ise konsolosluklar aracılığıyla düzenlenebilmektedir.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- İLETİŞİM -->
+    <section class="contact-section" id="iletisim">
+        <div class="container contact-grid">
+            
+            <div class="contact-info" data-aos="fade-right" data-aos-duration="1000">
+                <h2>İletişim Bilgileri</h2>
+                <div class="gold-line"></div>
+                <p style="margin-bottom: 40px; opacity: 0.9;">Hukuki destek talepleriniz ve randevu oluşturmak için çalışma saatleri içerisinde iletişime geçebilirsiniz.</p>
+                
+                <div class="info-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <div>
+                        <h4>Telefon</h4>
+                        <p>+90 (555) 123 45 67</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div>
+                        <h4>E-Posta</h4>
+                        <p>info@emrealtundas.av.tr</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div>
+                        <h4>Adres</h4>
+                        <p>Adalet Mahallesi, Hukuk Plaza, Kat: 5 No: 20<br>Şişli / İstanbul</p>
+                    </div>
+                </div>
+
+                <!-- Google Maps (Örnek Şişli Haritası) -->
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.9791484641663!2d28.9877473154154!3d41.05837697929424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab71d4715f5eb%3A0x8cfedb734892c23b!2zxZ5pxZ9saS9Jc3RhbmJ1bA!5e0!3m2!1str!2str!4v1684343167119!5m2!1str!2str" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <div class="contact-form-wrapper" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                <form class="contact-form" id="contactForm">
+                    <h3>Mesaj Gönderin</h3>
+
+                    <!-- Web3Forms.com üzerinden ücretsiz aldığınız Access Key'i buraya yapıştırın -->
+                    <input type="hidden" name="access_key" value="d9b41222-6a76-4d84-99b6-aa2a10035532">
+                    <input type="hidden" name="subject" value="Yeni İletişim Formu Mesajı - Av. Emre Altundaş">
+                    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+                    <div class="form-group">
+                        <input type="text" name="name" placeholder="Adınız Soyadınız" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="E-Posta Adresiniz" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="tel" name="phone" placeholder="Telefon Numaranız">
+                    </div>
+
+                    <div class="form-group">
+                        <textarea name="message" rows="5" placeholder="Danışmak istediğiniz hukuki konuyu kısaca özetleyiniz..." required></textarea>
+                    </div>
+
+                    <div class="form-group kvkk-check">
+                        <label style="display:flex; align-items:flex-start; gap:10px; font-size:0.85rem; opacity:0.85; cursor:pointer;">
+                            <input type="checkbox" name="kvkk_onay" required style="margin-top:4px; flex-shrink:0; width:16px; height:16px;">
+                            <span><a href="#" id="kvkkLinkAc" style="color: var(--gold); text-decoration: underline;">Kişisel Verilerin Korunması Kanunu (KVKK) Aydınlatma Metni</a>'ni okudum ve kişisel verilerimin işlenmesini kabul ediyorum.</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-gold" style="width: 100%;" id="formSubmitBtn">Gönder</button>
+
+                    <p id="formResult" style="margin-top:15px; font-size:0.9rem; display:none;"></p>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- KVKK AYDINLATMA METNİ MODAL -->
+    <div id="kvkkModal" class="kvkk-modal-overlay">
+        <div class="kvkk-modal-box">
+            <button id="kvkkKapat" class="kvkk-modal-close" aria-label="Kapat">&times;</button>
+            <h3>KVKK Aydınlatma Metni</h3>
+            <div class="gold-line"></div>
+            <div class="kvkk-modal-content">
+                <p><strong>Veri Sorumlusu:</strong> Av. Emre Altundaş Hukuk Bürosu ("Büro"), 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca veri sorumlusu sıfatıyla, işbu internet sitesi üzerinden iletişim formu aracılığıyla tarafımızla paylaştığınız kişisel verilerinizin işlenmesine ilişkin olarak sizi bilgilendirmek isteriz.</p>
+
+                <p><strong>İşlenen Kişisel Veriler:</strong> İletişim formu aracılığıyla ad-soyad, e-posta adresi, telefon numarası ve mesaj içeriğinde paylaştığınız diğer bilgiler işlenmektedir.</p>
+
+                <p><strong>İşlenme Amacı:</strong> Paylaştığınız kişisel veriler; tarafınızca iletilen talep ve sorulara yanıt verilmesi, randevu ve danışmanlık süreçlerinin yürütülmesi, hukuki destek taleplerinin değerlendirilmesi ve büromuzla iletişiminizin sağlanması amaçlarıyla sınırlı olarak işlenmektedir.</p>
+
+                <p><strong>Hukuki Sebep:</strong> Kişisel verileriniz, KVKK'nın 5. maddesinde yer alan "ilgili kişinin açık rızasının bulunması" hukuki sebebine dayanılarak işlenmektedir.</p>
+
+                <p><strong>Aktarım:</strong> Kişisel verileriniz, iletişim formunun teknik altyapısını sağlayan hizmet sağlayıcı (form işleme servisi) haricinde, yasal zorunluluklar dışında üçüncü kişilerle paylaşılmamaktadır.</p>
+
+                <p><strong>Saklama Süresi:</strong> Kişisel verileriniz, işlenme amacının gerektirdiği süre boyunca ve yasal saklama yükümlülükleri çerçevesinde muhafaza edilmektedir.</p>
+
+                <p><strong>Haklarınız:</strong> KVKK'nın 11. maddesi uyarınca; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, yurt içinde/yurt dışında aktarıldığı üçüncü kişileri bilme, eksik/yanlış işlenmişse düzeltilmesini isteme, KVKK'da öngörülen şartlar çerçevesinde silinmesini/yok edilmesini isteme, yapılan işlemlerin aktarıldığı üçüncü kişilere bildirilmesini isteme, münhasıran otomatik sistemlerle analiz edilmesi nedeniyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme ve kanuna aykırı işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme haklarına sahipsiniz.</p>
+
+                <p>Bu haklarınızı kullanmak için <strong>info@emrealtundas.av.tr</strong> adresinden büromuzla iletişime geçebilirsiniz.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <span class="logo">Av. Emre <span>Altundaş</span></span>
+            <p>Hukuk ve Danışmanlık</p>
+            <div style="margin: 20px 0;">
+                <a href="#" style="color: var(--gold); margin: 0 10px; font-size: 1.2rem;"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" style="color: var(--gold); margin: 0 10px; font-size: 1.2rem;"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+            <p>&copy; MB Desing Tarafından Mevzuata Uygun Hazırlanmıştır.</p>
+        </div>
+    </footer>
+
+    <!-- AOS Animasyon Kütüphanesi -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Sayfa kaydırıldıkça animasyonların çalışmasını sağlar
+        AOS.init({
+            once: true, // Animasyon sadece sayfa ilk aşağı kaydığında bir kez çalışır
+            offset: 100 // Element 100px göründüğünde tetiklenir
+        });
+    </script>
+
+    <!-- KVKK Modal Açma/Kapama Scripti -->
+    <script>
+        const kvkkModal = document.getElementById('kvkkModal');
+        const kvkkLinkAc = document.getElementById('kvkkLinkAc');
+        const kvkkKapat = document.getElementById('kvkkKapat');
+
+        kvkkLinkAc.addEventListener('click', function (e) {
+            e.preventDefault();
+            kvkkModal.classList.add('active');
+        });
+
+        kvkkKapat.addEventListener('click', function () {
+            kvkkModal.classList.remove('active');
+        });
+
+        kvkkModal.addEventListener('click', function (e) {
+            if (e.target === kvkkModal) {
+                kvkkModal.classList.remove('active');
+            }
+        });
+    </script>
+
+    <!-- İletişim Formu Gönderim Scripti (Web3Forms) -->
+    <script>
+        const contactForm = document.getElementById('contactForm');
+        const formResult = document.getElementById('formResult');
+        const formSubmitBtn = document.getElementById('formSubmitBtn');
+
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            formSubmitBtn.disabled = true;
+            formSubmitBtn.textContent = 'Gönderiliyor...';
+            formResult.style.display = 'none';
+
+            const formData = new FormData(contactForm);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                let jsonResponse = await response.json();
+                if (response.status === 200) {
+                    formResult.style.color = '#1a7f37';
+                    formResult.textContent = 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapılacaktır.';
+                    contactForm.reset();
+                } else {
+                    console.log(response);
+                    formResult.style.color = '#c0392b';
+                    formResult.textContent = jsonResponse.message || 'Bir hata oluştu, lütfen tekrar deneyin.';
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                formResult.style.color = '#c0392b';
+                formResult.textContent = 'Bağlantı hatası. Lütfen internetinizi kontrol edip tekrar deneyin.';
+            })
+            .finally(() => {
+                formResult.style.display = 'block';
+                formSubmitBtn.disabled = false;
+                formSubmitBtn.textContent = 'Gönder';
+            });
+        });
+    </script>
+</body>
+</html>
