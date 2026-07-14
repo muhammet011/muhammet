@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Makale | Av. Emre Altundaş</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --navy: #0F2747;
+        --gold: #C8A45D;
+        --white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --modern-text: #1E293B;
+        --font-head: 'Cormorant Garamond', serif;
+        --font-body: 'Inter', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); color: var(--modern-text); background: var(--white); }
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    header { background: var(--navy); padding: 22px 0; }
+    .nav-container { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--font-head); font-size: 1.6rem; color: var(--white); text-decoration: none; font-weight: 600; }
+    .logo span { color: var(--gold); }
+    header a.back { color: var(--gold); text-decoration: none; font-size: 0.9rem; }
+    .hero-img { width: 100%; height: 360px; object-fit: cover; background: linear-gradient(135deg,#0F2747,#1a3a63); }
+    .article-body { padding: 50px 0 90px; }
+    .art-date { color: var(--gold); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+    h1 { font-family: var(--font-head); font-size: 2.4rem; color: var(--navy); line-height: 1.25; margin-bottom: 30px; }
+    .content { font-size: 1.05rem; line-height: 1.9; color: #334155; white-space: pre-wrap; }
+    .content p { margin-bottom: 20px; }
+    .not-found { text-align: center; padding: 100px 20px; color: #94A3B8; }
+    footer { background: var(--navy); color: #94A3B8; text-align: center; padding: 30px; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="logo">Av. Emre <span>Altundaş</span></a>
+        <a href="makaleler.html" class="back">&larr; Tüm Makaleler</a>
+    </div>
+</header>
+
+<div id="articleWrap">
+    <p class="not-found">Yükleniyor...</p>
+</div>
+
+<footer>&copy; 2026 Av. Emre Altundaş Hukuk Bürosu. Tüm hakları saklıdır.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    async function loadArticle() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const wrap = document.getElementById('articleWrap');
+
+        if (!id) {
+            wrap.innerHTML = `<p class="not-found">Makale bulunamadı.</p>`;
+            return;
+        }
+
+        const { data, error } = await supabaseClient
+            .from('articles')
+            .select('*')
+            .eq('id', id)
+            .eq('published', true)
+            .single();
+
+        if (error || !data) {
+            wrap.innerHTML = `<p class="not-found">Bu makale bulunamadı veya yayından kaldırılmış olabilir.</p>`;
+            return;
+        }
+
+        document.getElementById('pageTitle').textContent = data.title + ' | Av. Emre Altundaş';
+        const date = new Date(data.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        const img = data.image_url ? `<img class="hero-img" src="${escapeHtml(data.image_url)}" alt="${escapeHtml(data.title)}">` : `<div class="hero-img"></div>`;
+
+        wrap.innerHTML = `
+            ${img}
+            <div class="container article-body">
+                <div class="art-date">${date}</div>
+                <h1>${escapeHtml(data.title)}</h1>
+                <div class="content">${escapeHtml(data.content)}</div>
+            </div>
+        `;
+    }
+
+    loadArticle();
+</script>
+</body>
+</html>
