@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Paneli | Av. Emre Altundaş</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --navy: #0F2747;
+        --gold: #C8A45D;
+        --white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --modern-text: #1E293B;
+        --danger: #C0392B;
+        --success: #1A7F37;
+        --font-head: 'Cormorant Garamond', serif;
+        --font-body: 'Inter', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); color: var(--modern-text); background: var(--light-gray); min-height: 100vh; }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 24px 90px; }
+
+    /* Giriş ekranı */
+    #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--navy); }
+    .login-box { background: var(--white); padding: 50px 40px; width: 100%; max-width: 380px; text-align: center; }
+    .login-box h1 { font-family: var(--font-head); color: var(--navy); font-size: 1.8rem; margin-bottom: 6px; }
+    .login-box p { color: #94A3B8; font-size: 0.85rem; margin-bottom: 26px; }
+    .login-box input { width: 100%; padding: 12px 14px; border: 1px solid #E2E8F0; margin-bottom: 14px; font-size: 0.95rem; }
+    .login-box button { width: 100%; padding: 13px; background: var(--navy); color: var(--white); border: none; font-weight: 600; cursor: pointer; letter-spacing: 0.5px; }
+    .login-box button:hover { background: #16345c; }
+    #loginError { color: var(--danger); font-size: 0.85rem; margin-top: 12px; display: none; }
+
+    /* Panel */
+    #panel { display: none; }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 12px; }
+    .panel-head h1 { font-family: var(--font-head); color: var(--navy); font-size: 2rem; }
+    .btn { padding: 11px 22px; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: #b8935083; }
+    .btn-outline { background: transparent; border: 1px solid var(--navy); color: var(--navy); }
+    .btn-danger { background: var(--danger); color: var(--white); }
+    .btn-sm { padding: 7px 14px; font-size: 0.8rem; }
+
+    .card { background: var(--white); padding: 30px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(15,39,71,0.06); }
+    .card h2 { font-family: var(--font-head); color: var(--navy); font-size: 1.4rem; margin-bottom: 20px; }
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; margin-top: 16px; }
+    label:first-of-type { margin-top: 0; }
+    input[type=text], textarea, input[type=file] { width: 100%; padding: 11px 13px; border: 1px solid #E2E8F0; font-family: var(--font-body); font-size: 0.92rem; }
+    textarea { resize: vertical; min-height: 140px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .img-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+    .img-tab { padding: 7px 14px; font-size: 0.78rem; border: 1px solid #E2E8F0; background: var(--white); cursor: pointer; }
+    .img-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .img-pane { display: none; }
+    .img-pane.active { display: block; }
+    .checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 18px; }
+    .checkbox-row input { width: auto; }
+    .checkbox-row label { margin: 0; }
+    .form-actions { margin-top: 24px; display: flex; gap: 10px; }
+    .status-msg { margin-top: 14px; font-size: 0.85rem; display: none; }
+    .preview-thumb { max-height: 90px; margin-top: 10px; display: none; }
+
+    .list-item { display: flex; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid #EEF1F5; }
+    .list-item:last-child { border-bottom: none; }
+    .list-item img { width: 70px; height: 55px; object-fit: cover; background: var(--light-gray); flex-shrink: 0; }
+    .list-item .info { flex-grow: 1; }
+    .list-item .info h3 { font-family: var(--font-head); font-size: 1.15rem; color: var(--navy); }
+    .list-item .meta { font-size: 0.78rem; color: #94A3B8; margin-top: 3px; }
+    .badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; margin-left: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-yes { background: #E7F5EA; color: var(--success); }
+    .badge-no { background: #FDECEA; color: var(--danger); }
+    .list-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .empty { color: #94A3B8; text-align: center; padding: 30px; }
+</style>
+</head>
+<body>
+
+<!-- GİRİŞ EKRANI -->
+<div id="loginScreen">
+    <div class="login-box">
+        <h1>Admin Paneli</h1>
+        <p>Av. Emre Altundaş — Makale Yönetimi</p>
+        <input type="password" id="passwordInput" placeholder="Şifre">
+        <button onclick="checkPassword()">Giriş Yap</button>
+        <p id="loginError">Şifre hatalı.</p>
+    </div>
+</div>
+
+<!-- PANEL -->
+<div id="panel">
+    <div class="container">
+        <div class="panel-head">
+            <h1>Makale Yönetimi</h1>
+            <div style="display:flex; gap:10px;">
+                <a href="makaleler.html" target="_blank" class="btn btn-outline">Siteyi Gör</a>
+                <button class="btn btn-outline" onclick="logout()">Çıkış Yap</button>
+            </div>
+        </div>
+
+        <!-- MAKALE FORMU -->
+        <div class="card">
+            <h2 id="formTitle">Yeni Makale Ekle</h2>
+            <form id="articleForm">
+                <input type="hidden" id="editId">
+                <label>Başlık</label>
+                <input type="text" id="fTitle" required placeholder="Örn: Kira Sözleşmelerinde Dikkat Edilmesi Gerekenler">
+
+                <label>Özet (liste sayfasında görünür, 1-2 cümle)</label>
+                <textarea id="fSummary" style="min-height:70px;" placeholder="Kısa özet..."></textarea>
+
+                <label>Makale İçeriği</label>
+                <textarea id="fContent" required placeholder="Makalenin tam metni..."></textarea>
+
+                <label>Görsel</label>
+                <div class="img-tabs">
+                    <div class="img-tab active" data-tab="url" onclick="switchImgTab('url')">Görsel URL'si</div>
+                    <div class="img-tab" data-tab="upload" onclick="switchImgTab('upload')">Bilgisayardan Yükle</div>
+                </div>
+                <div class="img-pane active" id="pane-url">
+                    <input type="text" id="fImageUrl" placeholder="https://...">
+                </div>
+                <div class="img-pane" id="pane-upload">
+                    <input type="file" id="fImageFile" accept="image/*" onchange="previewFile(event)">
+                    <p style="font-size:0.78rem; color:#94A3B8; margin-top:6px;">Kaydet'e bastığınızda otomatik olarak yüklenir.</p>
+                </div>
+                <img id="imgPreview" class="preview-thumb">
+
+                <div class="checkbox-row">
+                    <input type="checkbox" id="fPublished" checked>
+                    <label>Yayınla (işaretlemezseniz taslak olarak kalır)</label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-gold" id="submitBtn">Makaleyi Kaydet</button>
+                    <button type="button" class="btn btn-outline" id="cancelEditBtn" style="display:none;" onclick="resetForm()">Vazgeç</button>
+                </div>
+                <p id="formStatus" class="status-msg"></p>
+            </form>
+        </div>
+
+        <!-- MAKALE LİSTESİ -->
+        <div class="card">
+            <h2>Tüm Makaleler</h2>
+            <div id="articleList"><p class="empty">Yükleniyor...</p></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+    // ---------- GİRİŞ ----------
+    function checkPassword() {
+        const val = document.getElementById('passwordInput').value;
+        if (val === ADMIN_PASSWORD) {
+            sessionStorage.setItem('adminOk', '1');
+            showPanel();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+        }
+    }
+    document.getElementById('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+
+    function logout() {
+        sessionStorage.removeItem('adminOk');
+        location.reload();
+    }
+
+    function showPanel() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('panel').style.display = 'block';
+        loadList();
+    }
+
+    if (sessionStorage.getItem('adminOk') === '1') {
+        showPanel();
+    }
+
+    // ---------- GÖRSEL SEKME GEÇİŞİ ----------
+    function switchImgTab(tab) {
+        document.querySelectorAll('.img-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+        document.getElementById('pane-url').classList.toggle('active', tab === 'url');
+        document.getElementById('pane-upload').classList.toggle('active', tab === 'upload');
+    }
+
+    function previewFile(e) {
+        const file = e.target.files[0];
+        const img = document.getElementById('imgPreview');
+        if (file) {
+            img.src = URL.createObjectURL(file);
+            img.style.display = 'block';
+        }
+    }
+
+    function slugify(text) {
+        const trMap = { 'ç':'c','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u','Ç':'c','Ğ':'g','İ':'i','Ö':'o','Ş':'s','Ü':'u' };
+        return text.split('').map(ch => trMap[ch] || ch).join('')
+            .toLowerCase().trim()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-') + '-' + Date.now().toString().slice(-5);
+    }
+
+    // ---------- FORM GÖNDERİMİ ----------
+    document.getElementById('articleForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitBtn');
+        const statusEl = document.getElementById('formStatus');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Kaydediliyor...';
+
+        try {
+            const editId = document.getElementById('editId').value;
+            const activeTab = document.querySelector('.img-tab.active').dataset.tab;
+            let imageUrl = document.getElementById('fImageUrl').value.trim();
+
+            if (activeTab === 'upload') {
+                const file = document.getElementById('fImageFile').files[0];
+                if (file) {
+                    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')}`;
+                    const { error: uploadError } = await supabaseClient.storage
+                        .from('makale-gorselleri')
+                        .upload(fileName, file);
+                    if (uploadError) throw new Error('Görsel yüklenemedi: ' + uploadError.message);
+                    const { data: publicUrlData } = supabaseClient.storage
+                        .from('makale-gorselleri')
+                        .getPublicUrl(fileName);
+                    imageUrl = publicUrlData.publicUrl;
+                }
+            }
+
+            const payload = {
+                title: document.getElementById('fTitle').value.trim(),
+                summary: document.getElementById('fSummary').value.trim(),
+                content: document.getElementById('fContent').value.trim(),
+                image_url: imageUrl || null,
+                published: document.getElementById('fPublished').checked
+            };
+
+            if (editId) {
+                const { error } = await supabaseClient.from('articles').update(payload).eq('id', editId);
+                if (error) throw error;
+            } else {
+                payload.slug = slugify(payload.title);
+                const { error } = await supabaseClient.from('articles').insert(payload);
+                if (error) throw error;
+            }
+
+            statusEl.style.color = 'var(--success)';
+            statusEl.textContent = 'Makale kaydedildi.';
+            statusEl.style.display = 'block';
+            resetForm();
+            loadList();
+        } catch (err) {
+            console.error(err);
+            statusEl.style.color = 'var(--danger)';
+            statusEl.textContent = 'Hata: ' + (err.message || 'Kaydedilemedi.');
+            statusEl.style.display = 'block';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Makaleyi Kaydet';
+        }
+    });
+
+    function resetForm() {
+        document.getElementById('articleForm').reset();
+        document.getElementById('editId').value = '';
+        document.getElementById('formTitle').textContent = 'Yeni Makale Ekle';
+        document.getElementById('submitBtn').textContent = 'Makaleyi Kaydet';
+        document.getElementById('cancelEditBtn').style.display = 'none';
+        document.getElementById('imgPreview').style.display = 'none';
+        switchImgTab('url');
+    }
+
+    // ---------- LİSTE ----------
+    async function loadList() {
+        const listEl = document.getElementById('articleList');
+        const { data, error } = await supabaseClient
+            .from('articles')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            listEl.innerHTML = `<p class="empty">Liste yüklenemedi: ${error.message}</p>`;
+            return;
+        }
+        if (!data || data.length === 0) {
+            listEl.innerHTML = `<p class="empty">Henüz makale eklenmedi.</p>`;
+            return;
+        }
+
+        listEl.innerHTML = data.map(a => {
+            const date = new Date(a.created_at).toLocaleDateString('tr-TR');
+            const img = a.image_url ? `<img src="${a.image_url}">` : `<div style="width:70px;height:55px;background:#0F2747;"></div>`;
+            const badge = a.published ? `<span class="badge badge-yes">Yayında</span>` : `<span class="badge badge-no">Taslak</span>`;
+            return `
+                <div class="list-item">
+                    ${img}
+                    <div class="info">
+                        <h3>${a.title}${badge}</h3>
+                        <div class="meta">${date}</div>
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn btn-outline btn-sm" onclick='editArticle(${JSON.stringify(a).replace(/'/g, "&#39;")})'>Düzenle</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteArticle(${a.id}, '${a.title.replace(/'/g, "\\'")}')">Sil</button>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    function editArticle(a) {
+        document.getElementById('editId').value = a.id;
+        document.getElementById('fTitle').value = a.title;
+        document.getElementById('fSummary').value = a.summary || '';
+        document.getElementById('fContent').value = a.content;
+        document.getElementById('fImageUrl').value = a.image_url || '';
+        document.getElementById('fPublished').checked = a.published;
+        document.getElementById('formTitle').textContent = 'Makaleyi Düzenle';
+        document.getElementById('submitBtn').textContent = 'Değişiklikleri Kaydet';
+        document.getElementById('cancelEditBtn').style.display = 'inline-block';
+        switchImgTab('url');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function deleteArticle(id, title) {
+        if (!confirm(`"${title}" makalesini silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`)) return;
+        const { error } = await supabaseClient.from('articles').delete().eq('id', id);
+        if (error) {
+            alert('Silinemedi: ' + error.message);
+            return;
+        }
+        loadList();
+    }
+</script>
+</body>
+</html>
