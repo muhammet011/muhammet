@@ -601,6 +601,7 @@
                 <ul>
                     <li><a href="#hakkimizda">Hakkımızda</a></li>
                     <li><a href="#faaliyet">Faaliyet Alanları</a></li>
+                    <li><a href="makaleler.html">Makaleler</a></li>
                     <li><a href="#prensipler">Prensiplerimiz</a></li>
                     <li><a href="#sss">SSS</a></li>
                     <li><a href="#iletisim">İletişim</a></li>
@@ -699,6 +700,22 @@
                     <h3>Gayrimenkul Hukuku</h3>
                     <p>Tapu iptal/tescil, tahliye davaları, kira tespiti ve inşaat sözleşmelerinin hukuki altyapısının hazırlanması.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SON MAKALELER -->
+    <section class="features-section" id="makaleler-section" style="background: var(--light-gray);">
+        <div class="container">
+            <h2 data-aos="fade-up">Son Makaleler</h2>
+            <div class="gold-line center" data-aos="fade-up"></div>
+
+            <div id="homeArticleGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:28px; margin-top:40px;">
+                <p style="text-align:center; color:#94A3B8; grid-column:1/-1;">Yükleniyor...</p>
+            </div>
+
+            <div style="text-align:center; margin-top:40px;">
+                <a href="makaleler.html" class="btn btn-gold">Tüm Makaleleri Gör</a>
             </div>
         </div>
     </section>
@@ -919,6 +936,42 @@
     </script>
 
     <!-- İletişim Formu Gönderim Scripti (Web3Forms) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script>
+        async function loadHomeArticles() {
+            const grid = document.getElementById('homeArticleGrid');
+            const { data, error } = await supabaseClient
+                .from('articles')
+                .select('*')
+                .eq('published', true)
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            if (error || !data || data.length === 0) {
+                grid.innerHTML = `<p style="text-align:center; color:#94A3B8; grid-column:1/-1;">Henüz yayınlanmış makale bulunmuyor.</p>`;
+                return;
+            }
+
+            grid.innerHTML = data.map(a => {
+                const date = new Date(a.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+                const img = a.image_url
+                    ? `<img src="${a.image_url}" style="width:100%; height:170px; object-fit:cover;">`
+                    : `<div style="width:100%; height:170px; background:linear-gradient(135deg,#0F2747,#1a3a63);"></div>`;
+                return `
+                    <div style="background:var(--white); overflow:hidden; box-shadow:0 4px 20px rgba(15,39,71,0.06);">
+                        ${img}
+                        <div style="padding:22px;">
+                            <div style="color:var(--gold); font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">${date}</div>
+                            <h3 style="font-family:var(--font-head); font-size:1.25rem; color:var(--navy); margin-bottom:10px;">${a.title}</h3>
+                            <a href="makale.html?id=${a.id}" style="color:var(--navy); font-weight:600; font-size:0.85rem; text-decoration:none; border-bottom:2px solid var(--gold);">Devamını Oku &rarr;</a>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+        loadHomeArticles();
+    </script>
+
     <script>
         const contactForm = document.getElementById('contactForm');
         const formResult = document.getElementById('formResult');
